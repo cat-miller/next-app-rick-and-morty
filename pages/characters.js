@@ -1,23 +1,24 @@
+import { useEffect } from 'react';
 import Card from '../components/Card';
 import CardsWrapper from '../components/CardsWrapper';
 import Nav from '../components/Nav';
-import useFetch from '../components/useFetch';
-import Button from '../components/Button';
+import useStore from '../components/useStore';
 
 export default function CharactersPage() {
-  const { data } = useFetch('https://rickandmortyapi.com/api/character/');
+  const fetchCharacters = useStore(state => state.fetchCharacters);
+  const fetchedCharacters = useStore(state => state.fetchedCharacters);
 
-  //const [item, setItem] = useState({});
-  //console.log(data);
+  useEffect(() => {
+    fetchCharacters('https://rickandmortyapi.com/api/character/');
+  }, [fetchCharacters]);
 
-  async function addItem(item) {
-    // console.log('Hier!!');
+  async function addToCollection(character) {
     const res = await fetch('/api/collection/add', {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
       },
-      body: JSON.stringify(item),
+      body: JSON.stringify(character),
     });
     const message = await res.json();
     console.log(message);
@@ -26,7 +27,7 @@ export default function CharactersPage() {
   return (
     <>
       <CardsWrapper>
-        {data?.results.map(character => (
+        {fetchedCharacters?.results.map(character => (
           <Card key={character.id} name={character.name}>
             {character.name}
             <img src={character.image} alt={character.name} />
@@ -38,7 +39,7 @@ export default function CharactersPage() {
             </ul>
             <button
               onClick={() => {
-                addItem(character);
+                addToCollection(character);
               }}
             >
               Add to Collection

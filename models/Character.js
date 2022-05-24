@@ -16,6 +16,7 @@ const CharacterSchema = new mongoose.Schema({
   },
 });
 
-const model = mongoose.models.User || mongoose.model('User', UserSchema);
+const CharacterModel =
+  mongoose.models.Character || mongoose.model('Character', CharacterSchema);
 // const model = mongoose.models.CURRY || mongoose.model('CURRY', UserSchema);
-export default model;
+export default CharacterModel;
